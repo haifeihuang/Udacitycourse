@@ -1,0 +1,66 @@
+---
+title: "The Science of Decisons Project"
+author: "Haifei"
+date: "9/6/2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. What is our independent variable? What is our independent variable?
+### The independent variable: The agreement between words and color of words. 
+### The dependent variable: Time to tell the color of the words.
+
+## 2. What is an appropriate set of hypotheses for this task? What kind of statistical test do you expect to perform? Justify your choices.
+### 2.a Hypothesis: There is a difference between time used to tell the color under congruent and incongruent experiments.
+### μ is a population mean, "con" represents the congruent words condition, and "incon" represents the incongruent words condition.
+### H0: μcon = μincon (There is no difference between the time to tell the color between congruent and incongruent experiment)
+### HA: μcon != μincon ( There are differences in time to tell the color between two experiments)
+
+### 2.b Two-tailed dependent samples t-test is supposed to  be performed, α = 0.05.
+### The population variance is unknown and sample size is less than 30 suggests t-test.
+### Assumptions:
+#### ·Interval or ratio scale of measurement (approximately interval)
+#### ·Random sampling from a defined population
+#### ·Samples or sets of data used to produce the difference scores are linked in the population through repeated measurement, natural association, or matching
+#### ·Scores are normally distributed in the population; difference scores are normally distributed
+### Suppose that we do not know what is stroop effect, and the data is roughly normally distributed, so we propose a two-tailed t-test.
+### Samples were achieved by repeating experiments and were tested in two different conditions, which applies to "within subject" and "repeated measurements", suggesting dependent sample test.
+
+# 3.Report some descriptive statistics regarding this dataset. Includeat least one measure of central tendency and at least one measure of variability.
+```{r }
+if(!file.exists("./data")){dir.create("./data")}
+url <- "https://d17h27t6h515a5.cloudfront.net/topher/2016/September/57ce3727_stroopdata/stroopdata.csv"
+f <- file.path(getwd(),"stroopdata.csv")
+download.file(url,f,method = "curl")
+data <- read.csv(f)
+summary(data)
+sdCongruent = sd(data[["Congruent"]])
+sdCongruent
+sdIncongruent = sd(data[["Incongruent"]])
+sdIncongruent
+```
+
+## 4.Provide one or two visualizations that show the distribution of the sample data. Write one or two sentences noting what you observe about the plot or plots.
+
+```{r data}
+boxplot(data, xlab = "Task condition", ylab = "RTT (seconds)", main = "Stroop Task", col = c("blue","red"))
+```
+
+### The mean time for congruent task is lower than incongruent one. 
+
+## 5.Now, perform the statistical test and report your results. What is your confidence level and your critical statistic value? Do you reject the null hypothesis or fail to reject it? Come to a conclusion in terms of the experiment task. Did the results match up with your expectations?
+### α = .05， two-sided tail test, df = 23, from t-tbale can have t-critical = 2.069
+### d-bar = 7.96, Sd = 4.86, SEM = S/sqrt(n)= 0.99
+### t = (d-bar-0)/SEM = 8.02 > 2.069
+### So difference between Congruent and Incongruent group time is statistically significant.
+
+## 6.Optional: What do you think is responsible for the effects observed? Can you think of an alternative or similar task that would result in a similar effect? Some research about the problem will be helpful for thinking about these two questions!
+### Distraction from the character is the main reason for such phenomenon.
+
+REF: http://www.psychology.emory.edu/clinical/bliwise/Tutorials/TOM/meanstests/assump.htm
+     http://www.csic.cornell.edu/Elrod/t-test/t-test-assumptions.html
